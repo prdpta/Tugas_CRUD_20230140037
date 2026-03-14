@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ktp") // DISESUAIKAN: Menambahkan /api agar sesuai dengan $.ajax di index.html
+@RequestMapping("/api/ktp")
 @CrossOrigin
 public class KtpController {
 
@@ -18,7 +18,6 @@ public class KtpController {
 
     @PostMapping
     public ResponseEntity<KtpDto> tambahKtp(@RequestBody KtpDto ktpDto) {
-        // Pastikan nama method di service adalah tambahKtp
         return ResponseEntity.ok(ktpService.tambahKtp(ktpDto));
     }
 
