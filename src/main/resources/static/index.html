@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem KTP Digital Pro</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --bg-color: #f8f9fc;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: #2d3436;
+        }
+
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            background: white;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: white;
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f3f5;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .table-container {
+            padding: 0;
+        }
+
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #636e72;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .table tbody td {
+            padding: 1.25rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .badge-gender {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .badge-laki { background: #e0e7ff; color: #4361ee; }
+        .badge-perempuan { background: #fce7f3; color: #db2777; }
+
+        .btn-action {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-delete { background: #fff5f5; color: #ff6b6b; }
+        .btn-delete:hover { background: #ff6b6b; color: white; }
+
+        #empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #b2bec3;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-custom">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1 fw-bold text-primary">
+            <i class="fa-solid fa-address-card me-2"></i>KTP Manager <span class="text-muted fw-light">| 20230140037</span>
+        </span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fa-solid fa-pen-to-square"></i> Registrasi Baru
+                </div>
+                <div class="card-body p-4">
+                    <form id="ktpForm">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">NOMOR KTP (NIK)</label>
+                            <input type="text" class="form-control" id="nomorKtp" placeholder="16 Digit Angka" required maxlength="16">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">NAMA LENGKAP</label>
+                            <input type="text" class="form-control" id="namaLengkap" placeholder="Masukkan Nama Sesuai KTP" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">ALAMAT</label>
+                            <textarea class="form-control" id="alamat" rows="2" placeholder="Alamat Domisili"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold">TGL LAHIR</label>
+                                <input type="date" class="form-control" id="tanggalLahir" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold">GENDER</label>
+                                <select class="form-select" id="jenisKelamin">
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            <i class="fa-solid fa-save me-2"></i> Simpan Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-header justify-content-between">
+                    <span><i class="fa-solid fa-list-ul me-2"></i> Database KTP</span>
+                    <button class="btn btn-sm btn-light" onclick="loadKtpData()">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="ktpTable">
+                            <thead>
+                            <tr>
+                                <th>Identitas</th>
+                                <th>Alamat</th>
+                                <th>Lahir</th>
+                                <th>Gender</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody id="ktpTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" style="display:none;">
+                        <i class="fa-solid fa-folder-open fa-3x mb-3"></i>
+                        <p>Belum ada data tersedia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        loadKtpData();
+
+        $('#ktpForm').on('submit', function(e) {
+            e.preventDefault();
+            const ktpData = {
+                nomorKtp: $('#nomorKtp').val(),
+                namaLengkap: $('#namaLengkap').val(),
+                alamat: $('#alamat').val(),
+                tanggalLahir: $('#tanggalLahir').val(),
+                jenisKelamin: $('#jenisKelamin').val()
+            };
+
+            $.ajax({
+                url: '/api/ktp',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(ktpData),
+                success: function() {
+                    $('#ktpForm')[0].reset();
+                    loadKtpData();
+                },
+                error: function() { alert('Gagal menyimpan data!'); }
+            });
+        });
+    });
+
+    function loadKtpData() {
+        $.get('/api/ktp', function(data) {
+            const tbody = $('#ktpTableBody');
+            tbody.empty();
+
+            if (!data || data.length === 0) {
+                $('#empty-state').show();
+                $('#ktpTable').hide();
+            } else {
+                $('#empty-state').hide();
+                $('#ktpTable').show();
+                data.forEach(ktp => {
+                    const badge = ktp.jenisKelamin === 'Laki-laki' ? 'badge-laki' : 'badge-perempuan';
+                    tbody.append(`
+                        <tr>
+                            <td>
+                                <div class="fw-bold">${ktp.namaLengkap}</div>
+                                <div class="text-muted small">${ktp.nomorKtp}</div>
+                            </td>
+                            <td><div class="text-truncate" style="max-width: 150px;">${ktp.alamat || '-'}</div></td>
+                            <td>${ktp.tanggalLahir}</td>
+                            <td><span class="badge-gender ${badge}">${ktp.jenisKelamin}</span></td>
+                            <td class="text-center">
+                                <button class="btn-action btn-delete" onclick="hapusKtp(${ktp.id})">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+                });
+            }
+        });
+    }
+
+    function hapusKtp(id) {
+        if(confirm('Hapus data ini secara permanen?')) {
+            $.ajax({
+                url: '/api/ktp/' + id,
+                type: 'DELETE',
+                success: function() { loadKtpData(); }
+            });
+        }
+    }
+</script>
+</body>
+</html>
